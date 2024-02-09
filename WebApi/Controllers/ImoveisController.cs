@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
 
-namespace WebApi
+namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/imoveis")]
@@ -54,7 +54,7 @@ namespace WebApi
         /// <returns>O imóvel criado</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]      
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Post([FromBody] CreateImovel imovelRequest)
         {
             if (imovelRequest == null || imovelRequest.Endereco == null || imovelRequest.Proprietario == null)
@@ -71,7 +71,7 @@ namespace WebApi
             return Ok(imovel);
         }
 
-        
+
         /// <summary>
         /// Editar um imóvel por ID.
         /// </summary>
@@ -89,7 +89,7 @@ namespace WebApi
             {
                 return NotFound();
             }
-            if (imovelAtualizado == null || (string.IsNullOrEmpty(imovelAtualizado.Endereco) && string.IsNullOrEmpty(imovelAtualizado.Proprietario)))
+            if (imovelAtualizado == null || string.IsNullOrEmpty(imovelAtualizado.Endereco) && string.IsNullOrEmpty(imovelAtualizado.Proprietario))
             {
                 return BadRequest();
             }
@@ -110,7 +110,6 @@ namespace WebApi
         /// Deletar um imóvel por ID.
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="imovelAtualizado"></param>
         /// <returns>O imóvel deletado</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
