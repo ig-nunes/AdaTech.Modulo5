@@ -1,0 +1,32 @@
+@WebApi_HostAddress = http://localhost:5105
+
+### Pesquisar todos os imóveis
+GET {{WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+
+### Pesquisar imóvel por ID
+GET {{WebApi_HostAddress}}/api/imoveis/{id}
+Accept: application/json
+
+### Criar imóvel
+POST {{WebApi_HostAddress}}/api/imoveis/
+Content-Type: application/json
+
+{
+    "endereco": "Endereco do Imovel",
+    "proprietario": "Proprietario do Imovel"
+}
+
+### Editar um imóvel por ID
+PUT {{WebApi_HostAddress}}/api/imoveis/{id}
+Content-Type: application/json
+
+{
+    "endereco": "Novo Endereco do Imovel",
+    "proprietario": "Novo Proprietario do Imovel"
+}
+
+### Deletar um imóvel por ID
+DELETE {{WebApi_HostAddress}}/api/imoveis/{id}
+Accept: application/json
