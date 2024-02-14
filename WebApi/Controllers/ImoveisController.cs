@@ -4,7 +4,7 @@ using WebApi.Models;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Route("api/imoveis")]
+    [Route("imoveis")]
     public class ImoveisController : Controller
     {
         private static List<Imovel> _imoveis;
@@ -23,8 +23,12 @@ namespace WebApi.Controllers
         /// <returns>Todos os imóveis cadastrados</returns>
         [HttpGet("", Name = "GetAll")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult Get()
+        public IActionResult Get(bool testeErroMiddleware)
         {
+            if (testeErroMiddleware)
+            {
+                throw new Exception("Você escolheu dar erro.");
+            }
             return Ok(_imoveis);
         }
 
