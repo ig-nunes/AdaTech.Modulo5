@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace DadosSistema.Repositories
 {
-    public interface IVendaRepositorio
+    public interface IRepositorio<T> where T : class
     {
-        public Venda Add(Venda venda);
-        public List<Venda> Get();
-        public Venda? GetById(int id);
+        public T Add(T entity);
+        public List<T> Get();
+        public T? GetById(int id);
 
     }
 }
