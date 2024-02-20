@@ -1,5 +1,6 @@
 
 using DadosSistema;
+using DadosSistema.Models;
 using DadosSistema.Repositories;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -95,7 +96,9 @@ namespace WebApi
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddSingleton<IVendaRepositorio, VendasRepositorioInMemory>();
+            builder.Services.AddSingleton<IRepositorio<Venda>, VendasRepositorioInMemory>();
+            builder.Services.AddSingleton<IRepositorio<Devolucao>, DevolucaoRepositorioInMemory>();
+            builder.Services.AddSingleton<IRepositorio<Troca>, TrocaRepositorioInMemory>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -136,7 +139,6 @@ namespace WebApi
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
