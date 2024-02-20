@@ -16,6 +16,10 @@
             Data = DateTime.Now;
             Cliente = cliente;
             Itens = itens;
+            foreach (var item in itens)
+            {
+                item.VendaId = _id;
+            }
         }
 
         private decimal CalcularValorTotal()
