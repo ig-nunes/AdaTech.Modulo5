@@ -2,16 +2,17 @@
 using DadosSistema.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.RequestModels;
+using WebApi.ResponseModels;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class VendasController : Controller
+    public class VendaController : Controller
     {
-        private readonly IVendaRepositorio _vendaRepositorio;
+        private readonly IRepositorio<Venda> _vendaRepositorio;
 
-        public VendasController(IVendaRepositorio vendaRepositorio)
+        public VendaController(IRepositorio<Venda> vendaRepositorio)
         {
             _vendaRepositorio = vendaRepositorio;
         }
@@ -21,6 +22,42 @@ namespace WebApi.Controllers
         public IActionResult Get()
         {
             var venda = _vendaRepositorio.Get();
+            return Ok(venda);
+        }
+
+        [HttpGet("buscar")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public IActionResult GetQuery([FromQuery] int id)
+        {
+            var venda = _vendaRepositorio.GetById(id);
+            if (venda == null)
+            {
+                return NotFound(new ErroResponse
+                {
+                    Titulo = "Erro ao procurar venda",
+                    Detalhes = "Venda não encontrada",
+                    StatusCode = 404,
+                });
+            }
+            return Ok(venda);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public IActionResult GetRoute([FromRoute] int id)
+        {
+            var venda = _vendaRepositorio.GetById(id);
+            if (venda == null)
+            {
+                return NotFound( new ErroResponse 
+                {
+                    Titulo = "Erro ao procurar venda",
+                    Detalhes = "Venda não encontrada",
+                    StatusCode = 404,
+                });
+            }
             return Ok(venda);
         }
 
@@ -35,6 +72,7 @@ namespace WebApi.Controllers
             }
 
             var itensVenda = new List<ItemVenda>();
+            int itemVendaId = 1;
             foreach (var itemRequest in vendaRequest.ItemVendaRequests)
             {
                 if (itemRequest.ProdutoRequest == null)
@@ -43,8 +81,10 @@ namespace WebApi.Controllers
                 }
 
                 var produto = new Produto(itemRequest.ProdutoRequest.Nome, itemRequest.ProdutoRequest.Preco);
-                var itemVenda = new ItemVenda(produto, itemRequest.Quantidade);
+                var itemVenda = new ItemVenda(itemVendaId, produto, itemRequest.Quantidade);
                 itensVenda.Add(itemVenda);
+
+                itemVendaId++;
             }
 
             var venda = new Venda(vendaRequest.Cliente, itensVenda);
