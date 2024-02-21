@@ -4,6 +4,7 @@ using DadosSistema.Models;
 using DadosSistema.Repositories;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using WebApi.Filters;
 
 
 namespace WebApi
@@ -100,7 +101,10 @@ namespace WebApi
             builder.Services.AddSingleton<IRepositorio<Devolucao>, DevolucaoRepositorioInMemory>();
             builder.Services.AddSingleton<IRepositorio<Troca>, TrocaRepositorioInMemory>();
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<FiltroExcecao>();
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(

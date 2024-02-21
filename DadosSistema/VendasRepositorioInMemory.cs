@@ -1,4 +1,5 @@
-﻿using DadosSistema.Models;
+﻿using DadosSistema.CustomExceptions;
+using DadosSistema.Models;
 using DadosSistema.Repositories;
 using System;
 using System.Collections.Generic;
@@ -68,6 +69,10 @@ namespace DadosSistema
         };
         public Venda Add(Venda venda)
         {
+            if (_vendas.Count >= 15)
+            {
+                throw new DeliveryApiException("O banco está cheio", 500);
+            }
             _vendas.Add(venda);
             return venda;
         }
@@ -80,6 +85,10 @@ namespace DadosSistema
         public Venda? GetById(int id)
         {
             var venda = _vendas.FirstOrDefault(venda => venda.Id == id);
+            if (venda == null)
+            {
+                throw new DeliveryApiException($"Não foi encontrado Venda com este ID.", 404);
+            }
             return venda;
         }
     }

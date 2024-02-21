@@ -1,4 +1,5 @@
-﻿using DadosSistema.Models;
+﻿using DadosSistema.CustomExceptions;
+using DadosSistema.Models;
 using DadosSistema.Repositories;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,11 @@ namespace DadosSistema
         public Devolucao? GetById(int id)
         {
             var devolucao = _devolucoes.FirstOrDefault(devolucao => devolucao.Id == id);
+
+            if (devolucao == null)
+            {
+                throw new DeliveryApiException("Não foram encontradas Devoluções com este ID", 404);
+            }
 
             return devolucao;
         }
