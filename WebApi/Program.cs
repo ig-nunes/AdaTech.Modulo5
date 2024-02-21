@@ -5,6 +5,7 @@ using DadosSistema.Repositories;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using WebApi.Filters;
+using WebApi.Middlewares;
 
 
 namespace WebApi
@@ -104,7 +105,29 @@ namespace WebApi
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add<FiltroExcecao>();
+                //options.Filters.Add<FiltroLogAction>();
             });
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("PoliticaGlobal", policyBuilder =>
+                {
+                    policyBuilder.WithOrigins("http://localhost:5500");
+
+                    // Teste no navegador:
+                    //fetch('http://localhost:5105/Venda', {
+                    //                        method: 'GET',
+                    //        headers:
+                    //                            {
+                    //                                'Origin': 'http://localhost:5500'
+                    //        }
+                    //                        })
+                    //    .then(response => response.json())
+                    //    .catch(error => console.error('Error: ', error));
+                });
+            });
+
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(
@@ -139,10 +162,14 @@ namespace WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseCors("PoliticaGlobal");
+
+            app.UseMiddleware<LogMiddleware>();
 
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+
 
             app.MapControllers();
 
